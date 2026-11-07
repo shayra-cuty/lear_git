@@ -1,0 +1,538 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quizzy ♡</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 20px 14px;
+  background: linear-gradient(135deg,#ffe6f0,#fff8ed);
+  font-family: 'Nunito',sans-serif;
+  color: #765267;
+  text-align: center;
+}
+
+.container {
+  max-width: 550px;
+  margin: 20px auto;
+  background: #fffdf8;
+  padding: 25px;
+  border-radius: 28px;
+  box-shadow: 0 8px 30px #e9bfd0;
+}
+
+h1 {
+  color: #e58caf;
+  font-size: 45px;
+  margin: 5px;
+}
+
+.subtitle { color: #b18a9d; }
+
+h2 { color: #d77fa2; }
+
+.hidden { display: none !important; }
+
+input {
+  width: 90%;
+  padding: 13px;
+  border: 2px solid #f3c5d7;
+  border-radius: 15px;
+  font-size: 16px;
+  margin: 10px;
+  outline: none;
+}
+
+button {
+  border: none;
+  background: #f3b5ce;
+  color: white;
+  padding: 13px 20px;
+  margin: 6px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:hover {
+  background: #df8eb0;
+  transform: translateY(-2px);
+}
+
+.avatars,.levels {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 15px;
+}
+
+.avatar {
+  font-size: 30px;
+  background: #fff0f5;
+  border: 2px solid transparent;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.avatar.selected,.level.selected {
+  border: 2px solid #d978a0;
+  background: #ffe0ed;
+}
+
+.level {
+  background: #fff0f5;
+  color: #765267;
+  border: 2px solid transparent;
+  min-width: 100px;
+}
+
+.profile {
+  background: #fff0f5;
+  padding: 15px;
+  border-radius: 18px;
+  margin-bottom: 15px;
+}
+
+.profile span { font-size: 38px; }
+
+.stats {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0;
+}
+
+.stat {
+  background: #fff0f5;
+  border-radius: 15px;
+  padding: 12px 5px;
+  flex: 1;
+}
+
+.stat strong {
+  display: block;
+  color: #df8caf;
+  font-size: 22px;
+}
+
+.question {
+  font-size: 22px;
+  font-weight: 900;
+  margin: 25px 0;
+}
+
+.answer {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  background: #fbe2ec;
+  color: #765267;
+}
+
+.correct { background: #b9e7c8 !important; color: #315e42 !important; }
+.wrong { background: #f3b0b0 !important; color: #783b3b !important; }
+
+#feedback {
+  font-weight: 800;
+  min-height: 25px;
+}
+
+#leaderboard {
+  background: #fff0f5;
+  padding: 18px;
+  border-radius: 20px;
+  margin: 20px 0;
+}
+
+.leader-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  background: white;
+  padding: 12px;
+  border-radius: 14px;
+  margin: 9px 0;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.rank { font-size: 19px; }
+
+.small {
+  color: #b18a9d;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Quizzy ♡</h1>
+<p class="subtitle">Your little world of endless quizzes!</p>
+
+<!-- PROFILE SETUP -->
+<div id="setup">
+
+<h2>Create Your Gamer Profile ✨</h2>
+
+<input id="username" maxlength="20" placeholder="Enter your gamer name">
+
+<p>Choose your player:</p>
+
+<div class="avatars">
+<button class="avatar selected" onclick="chooseAvatar(this,'🐰')">🐰</button>
+<button class="avatar" onclick="chooseAvatar(this,'🐱')">🐱</button>
+<button class="avatar" onclick="chooseAvatar(this,'🐼')">🐼</button>
+<button class="avatar" onclick="chooseAvatar(this,'🦋')">🦋</button>
+<button class="avatar" onclick="chooseAvatar(this,'🐻')">🐻</button>
+<button class="avatar" onclick="chooseAvatar(this,'🦊')">🦊</button>
+<button class="avatar" onclick="chooseAvatar(this,'🐸')">🐸</button>
+</div>
+
+<p>Choose your difficulty:</p>
+
+<div class="levels">
+<button class="level selected" onclick="chooseLevel(this,'easy')">🌷 Easy</button>
+<button class="level" onclick="chooseLevel(this,'medium')">⭐ Medium</button>
+<button class="level" onclick="chooseLevel(this,'hard')">🔥 Hard</button>
+</div>
+
+<button onclick="createProfile()">Start Playing ♡</button>
+
+</div>
+
+<!-- LEADERBOARD -->
+<div id="leaderboard">
+<h2>🏆 Top 3 Players</h2>
+<div id="topPlayers"></div>
+<p class="small">Best scores from this browser</p>
+</div>
+
+<!-- GAME -->
+<div id="game" class="hidden">
+
+<div class="profile">
+<span id="playerAvatar">🐰</span>
+<h3 id="playerName">Gamer</h3>
+<p id="playerLevel">Easy Level 🌷</p>
+</div>
+
+<div class="stats">
+<div class="stat">
+<strong id="score">0</strong>Score
+</div>
+<div class="stat">
+<strong id="played">0</strong>Played
+</div>
+<div class="stat">
+<strong id="best">0</strong>Best
+</div>
+</div>
+
+<p id="round">Question 1</p>
+
+<div class="question" id="question"></div>
+
+<div id="answers"></div>
+
+<p id="feedback"></p>
+
+<button id="nextBtn" class="hidden" onclick="nextQuestion()">
+Next Question →
+</button>
+
+<br>
+<button onclick="changeProfile()">Change Profile</button>
+
+</div>
+
+</div>
+
+<script>
+let avatar = "🐰";
+let level = "easy";
+let player = "";
+let score = 0;
+let played = 0;
+let best = 0;
+let selected = false;
+let questionQueue = [];
+
+const points = {
+  easy: 10,
+  medium: 20,
+  hard: 30
+};
+
+const questions = {
+easy: [
+{q:"What is 2 + 2?",a:["3","4","5","6"],c:1},
+{q:"What is the capital of Bangladesh?",a:["Dhaka","Sylhet","Khulna","Rajshahi"],c:0},
+{q:"How many days are in a week?",a:["5","6","7","8"],c:2},
+{q:"Which animal says meow?",a:["Dog","Cat","Cow","Duck"],c:1},
+{q:"What colour is a banana?",a:["Blue","Pink","Yellow","Black"],c:2},
+{q:"How many legs does a spider have?",a:["6","8","10","4"],c:1},
+{q:"Which planet do we live on?",a:["Mars","Earth","Venus","Jupiter"],c:1},
+{q:"What is 10 × 2?",a:["10","15","20","25"],c:2}
+],
+
+medium: [
+{q:"Which planet is called the Red Planet?",a:["Earth","Mars","Venus","Jupiter"],c:1},
+{q:"What is 12 × 5?",a:["50","55","60","65"],c:2},
+{q:"Which is the largest ocean?",a:["Atlantic","Indian","Pacific","Arctic"],c:2},
+{q:"How many bones are in an adult human body?",a:["106","206","306","406"],c:1},
+{q:"Which gas do plants absorb?",a:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],c:2},
+{q:"What is the square root of 144?",a:["10","11","12","14"],c:2},
+{q:"Which language is spoken in Brazil?",a:["Spanish","French","Portuguese","English"],c:2},
+{q:"What is the freezing point of water?",a:["0°C","10°C","50°C","100°C"],c:0}
+],
+
+hard: [
+{q:"What is the chemical symbol for gold?",a:["Ag","Au","Fe","Go"],c:1},
+{q:"What is the smallest prime number?",a:["0","1","2","3"],c:2},
+{q:"Which organelle produces most cellular energy?",a:["Nucleus","Ribosome","Mitochondrion","Vacuole"],c:2},
+{q:"What is the approximate speed of light?",a:["300,000 km/s","30 km/s","3,000 km/s","30,000 km/s"],c:0},
+{q:"Which scientist developed the theory of relativity?",a:["Newton","Einstein","Darwin","Galileo"],c:1},
+{q:"What is 15 squared?",a:["125","200","225","250"],c:2},
+{q:"Which is the largest internal organ in the human body?",a:["Heart","Liver","Lung","Kidney"],c:1},
+{q:"What is the powerhouse of the cell?",a:["Nucleus","Mitochondria","Cell wall","Chloroplast"],c:1}
+]
+};
+
+function chooseAvatar(button,chosen) {
+  avatar = chosen;
+  document.querySelectorAll(".avatar").forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+}
+
+function chooseLevel(button,chosen) {
+  level = chosen;
+  document.querySelectorAll(".level").forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+}
+
+function scoreKey(name,difficulty) {
+  return "quizBest_" + name.toLowerCase() + "_" + difficulty;
+}
+
+function createProfile() {
+  const name = document.getElementById("username").value.trim();
+
+  if(!name) {
+    alert("Please enter your gamer name!");
+    return;
+  }
+
+  player = name;
+  localStorage.setItem("quizPlayer",player);
+  localStorage.setItem("quizAvatar",avatar);
+  localStorage.setItem("quizLevel",level);
+
+  score = 0;
+  played = 0;
+  best = Number(localStorage.getItem(scoreKey(player,level))) || 0;
+
+  document.getElementById("setup").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+
+  document.getElementById("playerName").textContent = player;
+  document.getElementById("playerAvatar").textContent = avatar;
+
+  const labels = {
+    easy:"Easy Level 🌷",
+    medium:"Medium Level ⭐",
+    hard:"Hard Level 🔥"
+  };
+
+  document.getElementById("playerLevel").textContent = labels[level];
+
+  updateStats();
+  shuffleQuestions();
+  showLeaderboard();
+  nextQuestion();
+}
+
+function updateStats() {
+  document.getElementById("score").textContent = score;
+  document.getElementById("played").textContent = played;
+  document.getElementById("best").textContent = best;
+}
+
+function shuffleQuestions() {
+  questionQueue = [...questions[level]];
+
+  for(let i=questionQueue.length-1;i>0;i--) {
+    const j=Math.floor(Math.random()*(i+1));
+    [questionQueue[i],questionQueue[j]] =
+    [questionQueue[j],questionQueue[i]];
+  }
+}
+
+function nextQuestion() {
+  if(questionQueue.length===0) shuffleQuestions();
+
+  selected=false;
+  const current=questionQueue.pop();
+
+  document.getElementById("round").textContent="Question "+(played+1);
+  document.getElementById("question").textContent=current.q;
+  document.getElementById("feedback").textContent="";
+  document.getElementById("nextBtn").classList.add("hidden");
+
+  const answers=document.getElementById("answers");
+  answers.innerHTML="";
+
+  current.a.forEach((answer,index)=>{
+    const button=document.createElement("button");
+    button.className="answer";
+    button.textContent=answer;
+    button.onclick=()=>checkAnswer(index,current.c,button);
+    answers.appendChild(button);
+  });
+}
+
+function checkAnswer(choice,correct,clickedButton) {
+  if(selected) return;
+
+  selected=true;
+  played++;
+
+  const buttons=document.querySelectorAll(".answer");
+
+  buttons.forEach((button,index)=>{
+    button.disabled=true;
+    if(index===correct) button.classList.add("correct");
+  });
+
+  if(choice===correct) {
+    score+=points[level];
+    document.getElementById("feedback").textContent=
+      "Amazing! +"+points[level]+" points 🎉";
+    document.getElementById("feedback").style.color="#55a879";
+  } else {
+    clickedButton.classList.add("wrong");
+    document.getElementById("feedback").textContent=
+      "Not quite! Keep learning! 💗";
+    document.getElementById("feedback").style.color="#d27d91";
+  }
+
+  if(score>best) {
+    best=score;
+    localStorage.setItem(scoreKey(player,level),best);
+  }
+
+  updateStats();
+  saveLeaderboard();
+  document.getElementById("nextBtn").classList.remove("hidden");
+}
+
+function saveLeaderboard() {
+  let board=JSON.parse(localStorage.getItem("quizLeaderboard")||"{}");
+
+  const key=player.toLowerCase()+"_"+level;
+  const old=board[key];
+
+  if(!old || score>old.score) {
+    board[key]={
+      name:player,
+      avatar:avatar,
+      level:level,
+      score:score
+    };
+  }
+
+  localStorage.setItem("quizLeaderboard",JSON.stringify(board));
+  showLeaderboard();
+}
+
+function showLeaderboard() {
+  let board=JSON.parse(localStorage.getItem("quizLeaderboard")||"{}");
+
+  const players=Object.values(board)
+    .sort((a,b)=>b.score-a.score)
+    .slice(0,3);
+
+  const medals=["🥇 1st","🥈 2nd","🥉 3rd"];
+
+  const container=document.getElementById("topPlayers");
+
+  if(players.length===0) {
+    container.innerHTML="<p>No players yet. Be the first! 🌷</p>";
+    return;
+  }
+
+  container.innerHTML=players.map((p,i)=>`
+    <div class="leader-row">
+      <span class="rank">${medals[i]}</span>
+      <span>${escapeHTML(p.avatar)} ${escapeHTML(p.name)}</span>
+      <span>${p.score} pts</span>
+    </div>
+  `).join("");
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[char]);
+}
+
+function changeProfile() {
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("setup").classList.remove("hidden");
+
+  document.getElementById("username").value=player;
+
+  document.querySelectorAll(".avatar").forEach(button=>{
+    button.classList.toggle("selected",button.textContent===avatar);
+  });
+
+  document.querySelectorAll(".level").forEach(button=>{
+    button.classList.toggle("selected",button.textContent.toLowerCase().includes(level));
+  });
+
+  showLeaderboard();
+}
+
+window.onload=function() {
+  const savedPlayer=localStorage.getItem("quizPlayer");
+  const savedAvatar=localStorage.getItem("quizAvatar");
+  const savedLevel=localStorage.getItem("quizLevel");
+
+  if(savedPlayer) {
+    document.getElementById("username").value=savedPlayer;
+    avatar=savedAvatar||"🐰";
+    level=savedLevel||"easy";
+
+    document.querySelectorAll(".avatar").forEach(button=>{
+      button.classList.toggle("selected",button.textContent===avatar);
+    });
+
+    document.querySelectorAll(".level").forEach(button=>{
+      button.classList.toggle("selected",button.textContent.toLowerCase().includes(level));
+    });
+  }
+
+  showLeaderboard();
+};
+</script>
+
+</body>
+</html>
