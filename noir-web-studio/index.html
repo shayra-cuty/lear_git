@@ -1,0 +1,664 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHARA WEB | Creative Digital Studio</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #090909;
+    color: #f8f3e9;
+    font-family: 'DM Sans', sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 8%;
+    border-bottom: 1px solid #29251c;
+    position: sticky;
+    top: 0;
+    background: #090909;
+    z-index: 10;
+}
+
+.logo {
+    color: #d8b56d;
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+nav a {
+    color: #eee5d4;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: #d8b56d;
+}
+
+.hero {
+    min-height: 560px;
+    padding: 120px 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: radial-gradient(circle at 80% 30%, #382b1744, transparent 40%);
+}
+
+.tag {
+    color: #d8b56d;
+    letter-spacing: 4px;
+    font-size: 12px;
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(45px, 7vw, 85px);
+    line-height: 1.12;
+    max-width: 850px;
+}
+
+.hero h1 span {
+    color: #d8b56d;
+}
+
+.hero p {
+    color: #aaa;
+    max-width: 520px;
+    line-height: 1.8;
+    margin: 25px 0;
+}
+
+.btn {
+    display: inline-block;
+    background: #d8b56d;
+    color: #111;
+    padding: 14px 25px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn:hover {
+    background: #f0d69c;
+    transform: translateY(-3px);
+}
+
+section {
+    padding: 85px 8%;
+}
+
+.section-tag {
+    color: #d8b56d;
+    font-size: 12px;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    margin-bottom: 18px;
+}
+
+.section-description {
+    color: #aaa;
+    line-height: 1.8;
+    margin-bottom: 35px;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.product {
+    background: #141414;
+    border: 1px solid #30291e;
+    border-radius: 9px;
+    overflow: hidden;
+    transition: .3s;
+}
+
+.product:hover {
+    transform: translateY(-7px);
+    border-color: #d8b56d;
+}
+
+.product-art {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: #211b12;
+}
+
+.product-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .5s;
+}
+
+.product:hover .product-art img {
+    transform: scale(1.06);
+}
+
+.product-info {
+    padding: 25px;
+}
+
+.product h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 23px;
+    margin-bottom: 10px;
+}
+
+.product p {
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+
+.price {
+    color: #d8b56d;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.custom {
+    background: #15120d;
+    border-top: 1px solid #332b1e;
+    border-bottom: 1px solid #332b1e;
+    text-align: center;
+}
+
+.custom p {
+    max-width: 600px;
+    margin: 15px auto 25px;
+    color: #aaa;
+    line-height: 1.8;
+}
+
+.contact {
+    text-align: center;
+}
+
+footer {
+    border-top: 1px solid #29251c;
+    padding: 30px 8%;
+    text-align: center;
+    color: #888;
+    font-size: 13px;
+}
+
+/* ORDER FORM */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000c;
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.modal-box {
+    background: #151515;
+    border: 1px solid #b89550;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 480px;
+    padding: 30px;
+    position: relative;
+    margin: auto;
+}
+
+.modal-box h2 {
+    font-family: 'Playfair Display', serif;
+    color: #d8b56d;
+    margin-bottom: 10px;
+}
+
+.modal-box > p {
+    color: #aaa;
+    font-size: 13px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.close {
+    position: absolute;
+    top: 12px;
+    right: 17px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 27px;
+    cursor: pointer;
+}
+
+label {
+    display: block;
+    margin: 14px 0 7px;
+    font-size: 13px;
+    color: #e8d9bb;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #423a2d;
+    background: #050505;
+    color: white;
+    border-radius: 5px;
+    font-family: inherit;
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.submit-btn {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.success-box {
+    text-align: center;
+}
+
+.success-box p {
+    color: #ccc;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.small-note {
+    color: #999;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 15px;
+}
+
+@media(max-width: 650px) {
+    header {
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    nav a {
+        margin: 0 7px;
+        font-size: 12px;
+    }
+
+    .hero {
+        padding: 85px 7%;
+    }
+
+    section {
+        padding: 65px 7%;
+    }
+
+    .section-title {
+        font-size: 34px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">SHARA WEB.</div>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#shop">Shop</a>
+        <a href="#custom">Custom</a>
+        <a href="#contact">Contact</a>
+    </nav>
+</header>
+
+<!-- HOME -->
+
+<div class="hero" id="home">
+    <div class="tag">CREATIVE DIGITAL STUDIO</div>
+
+    <h1>Websites Made <span>Extraordinary.</span></h1>
+
+    <p>
+        Discover beautifully crafted websites for your business,
+        brand and creative ideas. Choose a ready-made design
+        or create something completely your own.
+    </p>
+
+    <a href="#shop" class="btn">Explore Websites</a>
+</div>
+
+<!-- SHOP -->
+
+<section id="shop">
+    <div class="section-tag">OUR COLLECTION</div>
+    <h2 class="section-title">Ready-Made Websites</h2>
+
+    <p class="section-description">
+        Choose a design you love and place your order.
+    </p>
+
+    <div class="products">
+
+        <div class="product">
+            <div class="product-art">
+                <img
+                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900"
+                    alt="Business website preview">
+            </div>
+
+            <div class="product-info">
+                <h3>Business Pro</h3>
+                <p>A professional website for your business or company.</p>
+                <div class="price">৳2,500</div>
+
+                <button class="btn"
+                    onclick="openOrder('Business Pro','৳2,500')">
+                    Order Now
+                </button>
+            </div>
+        </div>
+
+        <div class="product">
+            <div class="product-art">
+                <img
+                    src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900"
+                    alt="Fashion store preview">
+            </div>
+
+            <div class="product-info">
+                <h3>Fashion Store</h3>
+                <p>A stylish online showcase for fashion and clothing brands.</p>
+                <div class="price">৳3,500</div>
+
+                <button class="btn"
+                    onclick="openOrder('Fashion Store','৳3,500')">
+                    Order Now
+                </button>
+            </div>
+        </div>
+
+        <div class="product">
+            <div class="product-art">
+                <img
+                    src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=900"
+                    alt="Cafe website preview">
+            </div>
+
+            <div class="product-info">
+                <h3>Cafe & Coffee</h3>
+                <p>A beautiful website for cafes, restaurants and coffee shops.</p>
+                <div class="price">৳2,000</div>
+
+                <button class="btn"
+                    onclick="openOrder('Cafe & Coffee','৳2,000')">
+                    Order Now
+                </button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- CUSTOM -->
+
+<section class="custom" id="custom">
+    <div class="section-tag">MADE FOR YOU</div>
+    <h2 class="section-title">Have Your Own Idea?</h2>
+
+    <p>
+        Tell us what kind of website you want.
+        We can discuss a custom design made around your idea.
+    </p>
+
+    <button class="btn"
+        onclick="openOrder('Custom Website','Custom Quote')">
+        Request a Custom Website
+    </button>
+</section>
+
+<!-- CONTACT -->
+
+<section class="contact" id="contact">
+    <div class="section-tag">LET'S CONNECT</div>
+    <h2 class="section-title">Let's Create Something Beautiful.</h2>
+
+    <p class="section-description">
+        Have a question? Send us an enquiry.
+    </p>
+
+    <button class="btn"
+        onclick="openOrder('General Enquiry','Not selected')">
+        Contact Us
+    </button>
+</section>
+
+<footer>
+    © 2026 SHARA WEB. All rights reserved.
+</footer>
+
+<!-- ORDER POPUP -->
+
+<div class="modal" id="orderModal">
+    <div class="modal-box">
+
+        <button class="close" onclick="closeOrder()">×</button>
+
+        <h2>Place Your Order</h2>
+        <p>Complete the details below to prepare your order message.</p>
+
+        <form id="orderForm">
+
+            <label>Selected Website</label>
+            <input id="productName" readonly>
+
+            <label>Your Name</label>
+            <input id="customerName" type="text"
+                required placeholder="Enter your name">
+
+            <label>Choose ONE contact method</label>
+            <select id="contactMethod" onchange="changeContactMethod()">
+                <option value="whatsapp">WhatsApp</option>
+                <option value="email">Email</option>
+            </select>
+
+            <div id="whatsappField">
+                <label>Your WhatsApp Number</label>
+                <input id="customerPhone" type="tel"
+                    placeholder="Enter your WhatsApp number">
+            </div>
+
+            <div id="emailField" style="display:none">
+                <label>Your Email Address</label>
+                <input id="customerEmail" type="email"
+                    placeholder="Enter your email">
+            </div>
+
+            <label>Tell us about your website</label>
+            <textarea id="requirements"
+                placeholder="Describe your requirements..."></textarea>
+
+            <button class="btn submit-btn" type="submit">
+                Continue to Send Order
+            </button>
+
+            <p class="small-note">
+                Your message will open in your selected app.
+                You must press Send there to submit your order.
+            </p>
+
+        </form>
+    </div>
+</div>
+
+<!-- CONFIRMATION -->
+
+<div class="modal" id="successModal">
+    <div class="modal-box success-box">
+        <h2>Message Ready!</h2>
+
+        <p id="successText">
+            Your order message is ready. Press Send in your selected app to submit it.
+        </p>
+
+        <button class="btn" onclick="closeSuccess()">Okay</button>
+    </div>
+</div>
+
+<script>
+
+const businessNumber = "8801518652008";
+const businessEmail = "ravizakais@gmail.com";
+
+function openOrder(product, price) {
+    document.getElementById("productName").value =
+        product + " - " + price;
+
+    document.getElementById("orderModal").style.display = "flex";
+}
+
+function closeOrder() {
+    document.getElementById("orderModal").style.display = "none";
+}
+
+function closeSuccess() {
+    document.getElementById("successModal").style.display = "none";
+}
+
+function changeContactMethod() {
+    const method = document.getElementById("contactMethod").value;
+
+    const whatsappField = document.getElementById("whatsappField");
+    const emailField = document.getElementById("emailField");
+
+    const phone = document.getElementById("customerPhone");
+    const email = document.getElementById("customerEmail");
+
+    whatsappField.style.display =
+        method === "whatsapp" ? "block" : "none";
+
+    emailField.style.display =
+        method === "email" ? "block" : "none";
+
+    phone.required = method === "whatsapp";
+    email.required = method === "email";
+}
+
+document.getElementById("orderForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const method = document.getElementById("contactMethod").value;
+    const product = document.getElementById("productName").value;
+    const name = document.getElementById("customerName").value;
+    const requirements = document.getElementById("requirements").value;
+
+    let contact = "";
+    let contactLabel = "";
+    let destination = "";
+
+    if (method === "whatsapp") {
+
+        contact = document.getElementById("customerPhone").value;
+        contactLabel = "Customer WhatsApp";
+
+        if (businessNumber.includes("X")) {
+            alert("Please set up your business WhatsApp number first.");
+            return;
+        }
+
+        const message =
+            "NEW SHARA WEB ORDER\n\n" +
+            "Customer: " + name + "\n" +
+            "Website: " + product + "\n" +
+            contactLabel + ": " + contact + "\n" +
+            "Requirements: " + requirements;
+
+        destination =
+            "https://wa.me/" + businessNumber +
+            "?text=" + encodeURIComponent(message);
+
+        window.open(destination, "_blank");
+
+    } else {
+
+        contact = document.getElementById("customerEmail").value;
+        contactLabel = "Customer Email";
+
+        if (businessEmail.includes("YOUR_BUSINESS")) {
+            alert("Please set up your business email first.");
+            return;
+        }
+
+        const message =
+            "NEW SHARA WEB ORDER\n\n" +
+            "Customer: " + name + "\n" +
+            "Website: " + product + "\n" +
+            contactLabel + ": " + contact + "\n" +
+            "Requirements: " + requirements;
+
+        destination =
+            "mailto:" + businessEmail +
+            "?subject=" + encodeURIComponent("New SHARA WEB Order") +
+            "&body=" + encodeURIComponent(message);
+
+        window.location.href = destination;
+    }
+
+    closeOrder();
+
+    document.getElementById("successText").textContent =
+        "Your order message is ready! Press SEND in " +
+        (method === "whatsapp" ? "WhatsApp" : "your email app") +
+        " to submit your order.";
+
+    document.getElementById("successModal").style.display = "flex";
+
+    this.reset();
+    changeContactMethod();
+
+});
+
+changeContactMethod();
+
+</script>
+
+</body>
+</html>
